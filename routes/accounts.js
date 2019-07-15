@@ -40,14 +40,19 @@ Router.delete("/:id", async (req, res) => {
   const account = await Accounts.getById(id);
 
   if (account.length === 0) {
-    res.status(404).json({ status: "error", message: "Account not found" });
+    return res
+      .status(404)
+      .json({ status: "error", message: "Account not found" });
   }
   const deleteAccount = await Accounts.remove(id);
   if (deleteAccount == 1) {
-    res.json({ status: "success", message: "Account deleted successfully" });
+    return res.json({
+      status: "success",
+      message: "Account deleted successfully"
+    });
   }
 
-  res
+  return res
     .status(500)
     .json({ status: "error", message: "Unable to delete account" });
 });
