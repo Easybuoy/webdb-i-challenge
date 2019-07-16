@@ -18,9 +18,16 @@ const remove = async id => {
     .delete();
 };
 
+function update(id, updatedAccount) {
+  return db('car_dealer')
+    .where({ id })
+    .update(updatedAccount);
+}
+
 module.exports = {
   get,
   getById,
   insert,
-  remove
+  remove,
+  update
 };

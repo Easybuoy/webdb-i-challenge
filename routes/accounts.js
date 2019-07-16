@@ -57,4 +57,35 @@ Router.delete("/:id", async (req, res) => {
     .json({ status: "error", message: "Unable to delete account" });
 });
 
+Router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, budget } = req.body;
+  if (!name && !budget) {
+    return res.status(400).json({
+      status: "error",
+      message: "Name and Budget fields are required"
+    });
+  }
+
+  const account = await Accounts.getById(id);
+
+  if (account.length === 0) {
+    return res
+      .status(404)
+      .json({ status: "error", message: "Account not found" });
+  }
+  const updatedAccount = await Accounts.update(id, { name, budget });
+
+  if (updatedAccount == 1) {
+    return res.json({
+      status: "success",
+      message: "Account updated successfully"
+    });
+  }
+
+  return res
+    .status(500)
+    .json({ status: "error", message: "Unable to update account" });
+});
+
 module.exports = Router;
